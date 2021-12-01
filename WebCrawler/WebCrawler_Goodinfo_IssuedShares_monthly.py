@@ -133,13 +133,14 @@ try:
             for index, temp_data in pd_final_data.iterrows():
                 temp_data_sheet = pd_final_data_sheet.loc[index]
                 # print(temp_data_sheet)
-                command = "INSERT INTO number_of_issued_shares(`stockPN`, `recordYear`, `recordMonth`, `SHratio_lower10`, `SHratio_10-50`, `SHratio_50-100`, `SHratio_100-200`, `SHratio_200-400`, `SHratio_400-800`, `SHratio_800-1000`, `SHratio_upper1000`) " \
-                          "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE `SHsheets_lower10` = %s, `SHsheets_10-50` = %s, `SHsheets_50-100` = %s, `SHsheets_100-200` = %s, `SHsheets_200-400` = %s, `SHsheets_400-800` = %s, `SHsheets_800-1000` = %s, `SHsheets_upper1000` = %s ,`aveNumofIssuedShares` = %s;"  # 比例
+                command = "INSERT INTO number_of_issued_shares(`stockPN`, `recordYear`, `recordMonth`, `SHratio_lower10`, `SHratio_10-50`, `SHratio_50-100`, `SHratio_100-200`, `SHratio_200-400`, `SHratio_400-800`, `SHratio_800-1000`, `SHratio_upper1000`, `SHsheets_lower10`,`SHsheets_10-50`,`SHsheets_50-100`,`SHsheets_100-200`,`SHsheets_200-400`,`SHsheets_400-800`,`SHsheets_800-1000`,`SHsheets_upper1000`,aveNumofIssuedShares) " \
+                          "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"  # 比例
                 if int(temp_data["recordMonth"]) in month_to_sql and int(temp_data["recordYear"]) in year_to_sql:
                     if temp_data['10'] != '-':
                         # 避免除以0
                         sum_temp = []
-                        for temp_column in ['10', '10-50', '50-100', '100-200', '200-400', '400-800', '800-1000', '1000']:
+                        for temp_column in ['10', '10-50', '50-100', '100-200', '200-400', '400-800', '800-1000',
+                                            '1000']:
                             if float(temp_data[temp_column]) != 0:
                                 sum_temp.append(float(temp_data_sheet[temp_column]) / float(temp_data[temp_column]))
                         avg_temp = sum(sum_temp) / len(sum_temp) * 100 * 10000
@@ -160,7 +161,7 @@ try:
             conn.commit()
 
             ## 延遲避免爬太快
-            print('finish')
+            # print('finish')
             time.sleep(15)
 
 
